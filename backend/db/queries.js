@@ -31,9 +31,25 @@ async function getMessagesBetweenUsers(userId1, userId2) {
   });
 }
 
+async function getProfile(userId) {
+  return prisma.profile.findUnique({
+    where: { userId },
+  });
+}
+
+async function updateProfile(userId, data) {
+  return prisma.profile.upsert({
+    where: { userId },
+    update: data,
+    create: { userId, ...data },
+  });
+}
+
 module.exports = {
   findUserByUsername,
   createUser,
   createMessage,
-  getMessagesBetweenUsers
+  getMessagesBetweenUsers,
+  getProfile,
+  updateProfile
 };
