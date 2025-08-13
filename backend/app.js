@@ -6,7 +6,9 @@ const PORT = process.env.PORT || 3000;
 const passport = require("passport");
 const passportConfig = require("./config/passport");
 
+// Routers
 const authRouter = require("./routes/authRouter");
+const dashboardRouter = require('./routes/dashboardRouter')
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: false }));
@@ -23,5 +25,6 @@ app.get("/", (req, res) => {
 });
 
 app.use('/auth', authRouter)
+app.use('/dashboard', dashboardRouter)
 
 app.listen(PORT, () => console.log(`App running on ${PORT}`));
