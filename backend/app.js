@@ -8,7 +8,8 @@ const passportConfig = require("./config/passport");
 
 // Routers
 const authRouter = require("./routes/authRouter");
-const dashboardRouter = require('./routes/dashboardRouter')
+const dashboardRouter = require("./routes/dashboardRouter");
+const messageRouter = require("./routes/messageRouter");
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: false }));
@@ -24,7 +25,8 @@ app.get("/", (req, res) => {
   res.send("Homepage");
 });
 
-app.use('/auth', authRouter)
-app.use('/dashboard', dashboardRouter)
+app.use("/auth", authRouter);
+app.use("/dashboard", dashboardRouter);
+app.use("/messages", messageRouter);
 
 app.listen(PORT, () => console.log(`App running on ${PORT}`));
