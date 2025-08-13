@@ -6,6 +6,8 @@ const PORT = process.env.PORT || 3000;
 const passport = require("passport");
 const passportConfig = require("./config/passport");
 
+const authRouter = require("./routes/authRouter");
+
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: false }));
 // Allow cross-origin requests (frontend <-> backend)
@@ -19,5 +21,7 @@ passportConfig(passport);
 app.get("/", (req, res) => {
   res.send("Homepage");
 });
+
+app.use('/auth', authRouter)
 
 app.listen(PORT, () => console.log(`App running on ${PORT}`));
