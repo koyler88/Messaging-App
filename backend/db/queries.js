@@ -13,7 +13,27 @@ async function createUser(username, hashedPassword) {
   });
 }
 
+async function createMessage(authorId, recipientId, content) {
+  return prisma.message.create({
+    data: { authorId, recipientId, content },
+  });
+}
+
+async function getMessagesBetweenUsers(userId1, userId2) {
+  return prisma.message.findMany({
+    where: {
+      OR: [
+        { authorId: userId1, recipientId: userId2 },
+        { authorId: userId2, recipientId: userId1 }
+      ]
+    },
+    orderBy: { createdAt: "asc" },
+  });
+}
+
 module.exports = {
   findUserByUsername,
   createUser,
+  createMessage,
+  getMessagesBetweenUsers
 };
