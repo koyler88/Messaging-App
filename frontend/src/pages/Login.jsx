@@ -6,7 +6,7 @@ import { loginUser } from "../api/auth";
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) => {
@@ -29,9 +29,9 @@ export default function Login() {
       <h2>Login</h2>
       {error && <p style={{ color: "red" }}>{error}</p>}
       <input
-        name="email"
-        placeholder="Email"
-        value={form.email}
+        name="username"
+        placeholder="Username"
+        value={form.username}
         onChange={handleChange}
       />
       <input
@@ -42,6 +42,9 @@ export default function Login() {
         onChange={handleChange}
       />
       <button type="submit">Login</button>
+      <p>
+        Don’t have an account? <a href="/register">Register here</a>
+      </p>
     </form>
   );
 }
