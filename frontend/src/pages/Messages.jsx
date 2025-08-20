@@ -1,78 +1,86 @@
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import "../styles/Messages.css"
-
-const API_BASE = "http://localhost:3000";
+import { useLocation } from "react-router-dom";
+import "../styles/Messages.css";
 
 export default function Messages() {
-  const { token } = useAuth();
-  const { userId } = useParams();
+  const { user, token } = useAuth();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const withUserId = queryParams.get("with");
+
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState("");
+  const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
-  const bottomRef = useRef();
+  const [error, setError] = useState("");
 
-  useEffect(() => {
-    const fetchMessages = async () => {
-      try {
-        const res = await axios.get(`${API_BASE}/messages/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setMessages(res.data.messages);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchMessages();
-  }, [token, userId]);
-
-  useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  // Fetch conversation
+  const fetchMessages = async () => {
     try {
-      const res = await axios.post(
-        `${API_BASE}/messages`,
-        { recipientId: userId, content: input },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMessages([...messages, res.data.message]);
-      setInput("");
+      const res = await axios.get(`http://localhost:3000/messages/${withUserId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMessages(res.data.messages);
+      setLoading(false);
     } catch (err) {
       console.error(err);
+      setError("Failed to load messages");
+      setLoading(false);
     }
   };
 
-  if (loading) return <p>Loading messages...</p>;
+  useEffect(() => {
+    if (withUserId) fetchMessages();
+  }, [withUserId]);
+
+  // Send a new message
+  const handleSend = async (e) => {
+    e.preventDefault();
+    if (!newMessage.trim()) return;
+
+    try {
+      await axios.post(
+        `http://localhost:3000/messages`,
+        { recipientId: Number(withUserId), content: newMessage },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNewMessage("");
+      fetchMessages(); // Refresh conversation
+    } catch (err) {
+      console.error(err);
+      setError("Failed to send message");
+    }
+  };
+
+  if (loading) return <p>Loading conversation...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div className="chat-container">
+    <div className="messages-container">
+      <h2>Conversation</h2>
       <div className="messages-list">
         {messages.map((msg) => (
           <div
             key={msg.id}
-            className={`message ${
-              msg.authorId === parseInt(userId) ? "received" : "sent"
+            className={`message-bubble ${
+              msg.author.id === user.id ? "sent" : "received"
             }`}
           >
-            <span className="message-username">{msg.author.username}</span>
             <p>{msg.content}</p>
+            <span className="timestamp">
+              {new Date(msg.createdAt).toLocaleTimeString()}
+            </span>
           </div>
         ))}
-        <div ref={bottomRef}></div>
       </div>
-      <form className="message-form" onSubmit={sendMessage}>
+
+      <form className="message-form" onSubmit={handleSend}>
         <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
+          type="text"
+          placeholder="Type your message..."
+          value={newMessage}
+          onChange={(e) => setNewMessage(e.target.value)}
         />
         <button type="submit">Send</button>
       </form>
