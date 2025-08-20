@@ -30,7 +30,7 @@ export default function App() {
         }
       />
       <Route
-        path="/messages/:userId"
+        path="/messages"
         element={
           <ProtectedRoute>
             <Messages />

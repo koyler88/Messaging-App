@@ -1,12 +1,13 @@
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Messages.css";
 
 export default function Messages() {
   const { user, token } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
   const withUserId = queryParams.get("with");
 
@@ -15,14 +16,12 @@ export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const messagesEndRef = useRef(null); // Ref for auto-scroll
+  const messagesEndRef = useRef(null);
 
-  // Scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  // Fetch conversation
   const fetchMessages = async () => {
     try {
       const res = await axios.get(
@@ -42,12 +41,10 @@ export default function Messages() {
     if (withUserId) fetchMessages();
   }, [withUserId]);
 
-  // Auto-scroll whenever messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
-  // Send a new message
   const handleSend = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -59,7 +56,7 @@ export default function Messages() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setNewMessage("");
-      fetchMessages(); // Refresh conversation
+      fetchMessages();
     } catch (err) {
       console.error(err);
       setError("Failed to send message");
@@ -71,6 +68,11 @@ export default function Messages() {
 
   return (
     <div className="messages-container">
+      {/* Back button */}
+      <button className="back-button" onClick={() => navigate("/dashboard")}>
+        &larr; Back to Dashboard
+      </button>
+
       <h2>Conversation</h2>
       <div className="messages-list">
         {messages.map((msg) => (
