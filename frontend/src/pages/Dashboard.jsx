@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import "../styles/Dashboard.css";
 
 export default function Dashboard() {
   const { user, token } = useAuth();
@@ -32,19 +33,19 @@ export default function Dashboard() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
 
   return (
-    <div>
+    <div className="dashboard-container">
       <h1>Welcome, {user.username}!</h1>
       <h2>Users</h2>
-      <ul>
+      <div className="user-list">
         {users.map((u) => (
-          <li key={u.id}>
-            {u.username}{" "}
+          <div key={u.id} className="user-card">
+            <p>{u.username}</p>
             <button onClick={() => navigate(`/messages?with=${u.id}`)}>
               Message
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
