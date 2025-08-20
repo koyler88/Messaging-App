@@ -1,47 +1,42 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Dashboard.css";
-
-const API_BASE = "http://localhost:3000";
+import axios from "axios";
 
 export default function Dashboard() {
-  const { token } = useAuth();
+  const { user, token } = useAuth();
   const navigate = useNavigate();
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/auth/users`, {
+        const res = await axios.get("http://localhost:3000/dashboard/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUsers(res.data);
+        // Remove the logged-in user
+        setUsers(res.data.users.filter(u => u.id !== user.id));
       } catch (err) {
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
+
     fetchUsers();
-  }, [token]);
+  }, [token, user.id]);
 
   const startChat = (userId) => {
     navigate(`/messages/${userId}`);
   };
 
-  if (loading) return <p>Loading users...</p>;
-
   return (
-    <div className="dashboard">
-      <h1>Users</h1>
-      <ul className="user-list">
-        {users.map((user) => (
-          <li key={user.id} className="user-item">
-            <span>{user.username}</span>
-            <button onClick={() => startChat(user.id)}>Message</button>
+    <div>
+      <h1>Welcome, {user.username}!</h1>
+      <h2>Start a chat:</h2>
+      <ul>
+        {users.map(u => (
+          <li key={u.id}>
+            {u.username}{" "}
+            <button onClick={() => startChat(u.id)}>Chat</button>
           </li>
         ))}
       </ul>
