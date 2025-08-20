@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "./Messages.css";
+import "../styles/Messages.css"
 
 const API_BASE = "http://localhost:3000";
 

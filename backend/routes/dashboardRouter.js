@@ -9,4 +9,10 @@ dashboardRouter.get(
   dashboardController.getDashboard
 );
 
+dashboardRouter.get(
+  "/users",
+  passport.authenticate("jwt", { session: false }),
+  dashboardController.getAllUsers
+);
+
 module.exports = dashboardRouter;
