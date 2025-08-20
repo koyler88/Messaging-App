@@ -1,37 +1,79 @@
+/* Container */
 .dashboard-container {
-  max-width: 800px;
+  max-width: 900px;
   margin: 2rem auto;
-  padding: 1rem;
-  font-family: Arial, sans-serif;
+  padding: 2rem;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #111827;
+  background-color: #f9fafb;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
 }
 
+/* Titles */
+.dashboard-container h1 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #1f2937;
+}
+
+.dashboard-container h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #4b5563;
+}
+
+/* User list grid */
 .user-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  margin-top: 1rem;
+  gap: 1.5rem;
+  justify-content: flex-start;
 }
 
+/* Individual user card */
 .user-card {
-  flex: 1 1 200px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
+  flex: 1 1 220px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
   text-align: center;
-  background-color: #f7f7f7;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
 }
 
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Username text */
+.user-card p {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+}
+
+/* Message button */
 .user-card button {
-  margin-top: 0.5rem;
   padding: 0.5rem 1rem;
-  background-color: #3b82f6;
+  background: linear-gradient(to right, #3b82f6, #60a5fa);
   color: white;
+  font-weight: 500;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
 }
 
 .user-card button:hover {
-  background-color: #2563eb;
+  background: linear-gradient(to right, #2563eb, #3b82f6);
+  transform: scale(1.05);
+}
+
+/* Responsive tweak */
+@media (max-width: 600px) {
+  .user-card {
+    flex: 1 1 100%;
+  }
 }
