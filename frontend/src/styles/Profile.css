@@ -1,0 +1,43 @@
+.profile-container {
+  margin: 20px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  max-width: 500px;
+}
+
+.profile-form input {
+  display: block;
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.profile-form button {
+  margin-right: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #0077ff;
+  color: white;
+}
+
+.profile-view img {
+  max-width: 100px;
+  border-radius: 50%;
+  display: block;
+  margin-top: 10px;
+}
+
+.profile-view button {
+  margin-top: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  background-color: #0077ff;
+  color: white;
+}
