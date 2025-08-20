@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import { loginUser } from "../api/auth";
+import "../styles/Auth.css"; // shared styling for login/register
 
 export default function Login() {
   const { login } = useAuth();
@@ -25,26 +26,28 @@ export default function Login() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      <input
-        name="username"
-        placeholder="Username"
-        value={form.username}
-        onChange={handleChange}
-      />
-      <input
-        type="password"
-        name="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={handleChange}
-      />
-      <button type="submit">Login</button>
-      <p>
-        Don’t have an account? <a href="/register">Register here</a>
-      </p>
-    </form>
+    <div className="auth-container">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2>Login</h2>
+        {error && <p className="error-message">{error}</p>}
+        <input
+          name="username"
+          placeholder="Username"
+          value={form.username}
+          onChange={handleChange}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          value={form.password}
+          onChange={handleChange}
+        />
+        <button type="submit">Login</button>
+        <p className="redirect-text">
+          Don’t have an account? <a href="/register">Register here</a>
+        </p>
+      </form>
+    </div>
   );
 }
