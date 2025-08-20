@@ -59,7 +59,22 @@ const login = async (req, res) => {
   }
 };
 
+// Get all users except the current logged-in user
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await db.getAllUsers();
+    // Filter out the current user
+    const filtered = users.filter(u => u.id !== req.user.id);
+    res.json(filtered);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+
 module.exports = {
   register,
   login,
+  getAllUsers
 };

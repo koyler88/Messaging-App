@@ -8,6 +8,15 @@ async function findUserById(id) {
   return prisma.user.findUnique({ where: { id } });
 }
 
+async function getAllUsers() {
+  return prisma.user.findMany({
+    select: {
+      id: true,
+      username: true,
+    },
+  });
+}
+
 async function createUser(username, hashedPassword) {
   return prisma.user.create({
     data: {
@@ -60,5 +69,6 @@ module.exports = {
   getMessagesBetweenUsers,
   getProfile,
   updateProfile,
-  findUserById
+  findUserById,
+  getAllUsers,
 };
