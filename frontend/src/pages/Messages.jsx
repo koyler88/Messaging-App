@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../hooks/useAuth";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
@@ -15,12 +15,20 @@ export default function Messages() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  const messagesEndRef = useRef(null); // Ref for auto-scroll
+
+  // Scroll to bottom
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
   // Fetch conversation
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/messages/${withUserId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        `http://localhost:3000/messages/${withUserId}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setMessages(res.data.messages);
       setLoading(false);
     } catch (err) {
@@ -33,6 +41,11 @@ export default function Messages() {
   useEffect(() => {
     if (withUserId) fetchMessages();
   }, [withUserId]);
+
+  // Auto-scroll whenever messages change
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   // Send a new message
   const handleSend = async (e) => {
@@ -73,6 +86,7 @@ export default function Messages() {
             </span>
           </div>
         ))}
+        <div ref={messagesEndRef} />
       </div>
 
       <form className="message-form" onSubmit={handleSend}>
