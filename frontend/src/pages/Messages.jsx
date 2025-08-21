@@ -15,13 +15,16 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [recipient, setRecipient] = useState(null); // store recipient user info
 
   const messagesEndRef = useRef(null);
 
+  // Scroll to bottom
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  // Fetch conversation
   const fetchMessages = async () => {
     try {
       const res = await axios.get(
@@ -37,14 +40,34 @@ export default function Messages() {
     }
   };
 
+  // Fetch recipient details
+  const fetchRecipient = async () => {
+    try {
+      const res = await fetch(`http://localhost:3000/users/${withUserId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) throw new Error("Failed to fetch user");
+      const data = await res.json();
+      setRecipient(data);
+    } catch (err) {
+      console.error(err);
+      setRecipient({ username: "Unknown User" });
+    }
+  };
+
   useEffect(() => {
-    if (withUserId) fetchMessages();
+    if (withUserId) {
+      fetchMessages();
+      fetchRecipient();
+    }
   }, [withUserId]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
+  // Send a new message
   const handleSend = async (e) => {
     e.preventDefault();
     if (!newMessage.trim()) return;
@@ -68,12 +91,18 @@ export default function Messages() {
 
   return (
     <div className="messages-container">
-      {/* Back button */}
-      <button className="back-button" onClick={() => navigate("/dashboard")}>
-        &larr; Back to Dashboard
-      </button>
+      <div className="messages-header">
+        <button onClick={() => navigate("/dashboard")} className="back-btn">
+          ← Back
+        </button>
+        <h2>
+          Conversation with{" "}
+          <span className="recipient-name">
+            {recipient ? recipient.username : "Loading..."}
+          </span>
+        </h2>
+      </div>
 
-      <h2>Conversation</h2>
       <div className="messages-list">
         {messages.map((msg) => (
           <div

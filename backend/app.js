@@ -11,6 +11,7 @@ const authRouter = require("./routes/authRouter");
 const dashboardRouter = require("./routes/dashboardRouter");
 const messageRouter = require("./routes/messageRouter");
 const profileRouter = require("./routes/profileRouter");
+const userRouter = require("./routes/userRouter");
 
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: false }));
@@ -30,5 +31,6 @@ app.use("/auth", authRouter);
 app.use("/dashboard", dashboardRouter);
 app.use("/messages", messageRouter);
 app.use("/profile", profileRouter);
+app.use("/users", userRouter);
 
 app.listen(PORT, () => console.log(`App running on ${PORT}`));

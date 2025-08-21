@@ -73,17 +73,26 @@
   background-color: #2563eb;
 }
 
-.back-button {
-  margin-bottom: 1rem;
-  padding: 0.5rem 1rem;
-  background-color: #e5e5ea;
-  color: #333;
+.messages-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.back-btn {
+  padding: 0.3rem 0.7rem;
   border: none;
+  background: #3b82f6;
+  color: white;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.back-button:hover {
-  background-color: #d4d4d4;
+.back-btn:hover {
+  background: #2563eb;
+}
+
+.recipient-name {
+  color: #3b82f6;
 }
 
